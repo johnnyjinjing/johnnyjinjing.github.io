@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COVID-19 in the U.S</title>
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
+  <script src="scripts/plot.js"></script>
+</head>
+
+<body>
+  <h1>COVID-19 in the U.S</h1>
+  <p>Coronavirus (COVID-19) is an illness caused by a virus that can spread from person to person. As of July 30, cases
+    had occurred in all 50 U.S. states, the District of Columbia, and all inhabited U.S. territories except American
+    Samoa.</p>
+  <p>This site provides some visualizations of the COVID-19 data in the U.S. The COVID-19 data used are from <a
+      target="_blank"
+      href='https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_daily_reports_us/07-30-2020.csv'>Johns
+      Hopkins University</a>. The auxiliary data are obtained from United States Census Bureau (<a target="_blank"
+      href='https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html#par_textimage'>Link 1</a>
+    and <a target="_blank"
+      href='https://www.census.gov/newsroom/press-releases/2020/2020-island-areas-populations.html'>Link 2</a>). </p>
+  <p><b>Select a scene:</b></p>
+  <div class="pagination">
+    <a id='pagination-1' class="active" href="#" onclick="plotScene1()">1</a>
+    <a id='pagination-2' href="#" onclick="plotScene2()">2</a>
+    <a id='pagination-3' href="#" onclick="plotScene3()">3</a>
+  </div>
+  <h2 id='viz-title'>Cases vs. Deaths by State (as of July 30)</h2>
+  <p id='viz-description'>This chart shows the total cases and deaths by <b>state</b> as of July 30. Each state is
+    represented by a circle. States are grouped into geographical <b>regions</b> and marked in different colors and can
+    be used as a <b>filter</b>. The size the circle indicates the <b>population</b> of the state. The dashed lines mark
+    different <b>fatality rate</b>. Mouseover a circle shows the actual number of cases and deaths of the state.</p>
+  <div class="svg-container">
+    <svg id="chart" viewBox="0 0 1000 2000"></svg>
+  </div>
+</body>
+
+</html>

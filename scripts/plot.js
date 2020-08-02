@@ -360,9 +360,9 @@ function plotScene1() {
 }
 
 function plotScene2() {
-  document.getElementById('pagination-2').setAttribute('class', 'active');
-
   plotTimeSeries('cases');
+
+  document.getElementById('pagination-2').setAttribute('class', 'active');
 
   // annotation
   var svg = d3.select('#chart g');
@@ -423,9 +423,9 @@ function plotScene2() {
 }
 
 function plotScene3() {
-  document.getElementById('pagination-3').setAttribute('class', 'active');
-
   plotTimeSeries('deaths');
+
+  document.getElementById('pagination-3').setAttribute('class', 'active');
 
   // annotation
   var svg = d3.select('#chart g');

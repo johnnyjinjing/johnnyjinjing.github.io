@@ -389,14 +389,14 @@ function plotScene2() {
     .attr('dy', 12)
     .text('in March');
 
-  annotation.append("line")
-    .attr("x1", 110)
-    .attr("y1", 110)
-    .attr("x2", 150)
-    .attr("y2", 150)
-    .attr("stroke-width", 1)
-    .attr("stroke", "black")
-    .attr("marker-end", "url(#triangle)");
+  annotation.append('line')
+    .attr('x1', 110)
+    .attr('y1', 110)
+    .attr('x2', 150)
+    .attr('y2', 150)
+    .attr('stroke-width', 1)
+    .attr('stroke', 'black')
+    .attr('marker-end', 'url(#triangle)');
 
   annotation.append('text')
     .style('fill', 'black')
@@ -412,14 +412,14 @@ function plotScene2() {
     .attr('dy', 12)
     .text('in total cases on July 22');
 
-  annotation.append("line")
-    .attr("x1", 440)
-    .attr("y1", -10)
-    .attr("x2", 470)
-    .attr("y2", 0)
-    .attr("stroke-width", 1)
-    .attr("stroke", "black")
-    .attr("marker-end", "url(#triangle)");
+  annotation.append('line')
+    .attr('x1', 440)
+    .attr('y1', -10)
+    .attr('x2', 470)
+    .attr('y2', 0)
+    .attr('stroke-width', 1)
+    .attr('stroke', 'black')
+    .attr('marker-end', 'url(#triangle)');
 }
 
 function plotScene3() {
@@ -448,14 +448,14 @@ function plotScene3() {
     .attr('dy', 12)
     .text('reached 10,000 on Apr 10');
 
-  annotation.append("line")
-    .attr("x1", 120)
-    .attr("y1", 40)
-    .attr("x2", 200)
-    .attr("y2", 54)
-    .attr("stroke-width", 1)
-    .attr("stroke", "black")
-    .attr("marker-end", "url(#triangle)");
+  annotation.append('line')
+    .attr('x1', 120)
+    .attr('y1', 40)
+    .attr('x2', 200)
+    .attr('y2', 54)
+    .attr('stroke-width', 1)
+    .attr('stroke', 'black')
+    .attr('marker-end', 'url(#triangle)');
 
   annotation.append('text')
     .style('fill', 'black')
@@ -471,14 +471,14 @@ function plotScene3() {
     .attr('dy', 12)
     .text('deaths in early March');
 
-  annotation.append("line")
-    .attr("x1", 70)
-    .attr("y1", 330)
-    .attr("x2", 110)
-    .attr("y2", 360)
-    .attr("stroke-width", 1)
-    .attr("stroke", "black")
-    .attr("marker-end", "url(#triangle)");
+  annotation.append('line')
+    .attr('x1', 70)
+    .attr('y1', 330)
+    .attr('x2', 110)
+    .attr('y2', 360)
+    .attr('stroke-width', 1)
+    .attr('stroke', 'black')
+    .attr('marker-end', 'url(#triangle)');
 }
 
 function plotTimeSeries(value) {
@@ -623,15 +623,17 @@ function plotTimeSeries(value) {
   var legend = svg.append('g');
   var legendText = ['Northeast', 'Midwest', 'South', 'West', 'Territory'];
 
-  legend.selectAll('circle')
+  legend.selectAll('.legend-region')
     .data(legendText)
     .enter()
-    .append('circle')
-    .attr('cx', 650)
-    .attr('cy', (d, i) => 30 + i * 20)
-    .attr('r', 5)
+    .append('line')
+    .attr('x1', 640)
+    .attr('y1', (d, i) => 28 + i * 20)
+    .attr('x2', 660)
+    .attr('y2', (d, i) => 28 + i * 20)
     .attr('class', 'legend-region')
-    .style('fill', (d, i) => color[i])
+    .attr('stroke-width', 5)
+    .attr('stroke', (d, i) => color[i])
     .on('mouseover', (d, i) => {
       d3.selectAll('.line')
         .data(data2)
@@ -700,15 +702,15 @@ function plotTimeSeries(value) {
 }
 
 function addArrow(svg) {
-  svg.append("svg:defs").append("svg:marker")
-    .attr("id", "triangle")
-    .attr("refX", 6)
-    .attr("refY", 6)
-    .attr("markerWidth", 30)
-    .attr("markerHeight", 30)
-    .attr("markerUnits", "userSpaceOnUse")
-    .attr("orient", "auto")
-    .append("path")
-    .attr("d", "M 0 0 12 6 0 12 3 6")
-    .style("fill", "black");
+  svg.append('svg:defs').append('svg:marker')
+    .attr('id', 'triangle')
+    .attr('refX', 6)
+    .attr('refY', 6)
+    .attr('markerWidth', 30)
+    .attr('markerHeight', 30)
+    .attr('markerUnits', 'userSpaceOnUse')
+    .attr('orient', 'auto')
+    .append('path')
+    .attr('d', 'M 0 0 12 6 0 12 3 6')
+    .style('fill', 'black');
 }

@@ -1,10 +1,16 @@
-var today = '2020-07-30';
+const ANIMATION_DURATION = 5000;
+const ANNOTAION_BACKGROUND_COLOR = '#777777';
+const ANNOTAION_BACKGROUND_OPACITY = 0.5;
+
+const defaultStates = new Set(['California', 'New York', 'Illinois', 'Washington']);
+const color = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00'];
+const today = '2020-07-30';
+
 var data = [];
 var states = [];
-var defaultStates = new Set(['California', 'New York', 'Illinois', 'Washington']);
 var dateStringSet = new Set();
-var color = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00'];
 var data1, data2 = [];
+var selectedScene = 1;
 
 window.onload = function() {
   // read 1st data file
@@ -76,10 +82,9 @@ window.onload = function() {
 };
 
 function plotScene1() {
-  document.getElementsByClassName('pagination')[0].getElementsByClassName('active')[0].removeAttribute('class');
-  document.getElementById('pagination-1').setAttribute('class', 'active');
+  selectScene(1);
   document.getElementById('viz-title').innerHTML = 'Cases vs. Deaths by State (as of July 30)';
-  document.getElementById('viz-description').innerHTML = 'This chart shows the total cases and deaths by <b>state</b> as of July 30. Each state is represented by a circle. States are grouped into geographical <b>regions</b> and marked in different colors and can be used as a <b>filter</b>. The size the circle indicates the <b>population</b> of the state. The dashed lines mark different <b>fatality rate</b>. Mouseover a circle shows the actual number of cases and deaths of the state.';
+  document.getElementById('viz-description').innerHTML = 'This chart shows the total cases and deaths by <b>state</b> as of July 30. Each state is represented by a circle. States are grouped into geographical <b>regions</b> and marked in different colors and can be used as a filter. The size the circle indicates the <b>population</b> of the state. The dashed lines mark different <b>fatality rate</b>. Mousing-over a circle shows the actual number of cases and deaths of the state.';
 
   var width = 500, height = 300, padding = 50;
 
@@ -277,7 +282,7 @@ function plotScene1() {
   legend1.append('text')
     .attr('x', 540)
     .attr('y', 5)
-    .text('Region (filter)').style('font-size', '15px').attr('alignment-baseline', 'middle')
+    .text('Region').style('font-size', '15px').attr('alignment-baseline', 'middle')
 
   // legend for population
   var legend2 = svg.append('g');
@@ -357,134 +362,235 @@ function plotScene1() {
     .attr('transform', 'translate(450, 15)')
     .attr('font-weight', 600)
     .text('NJ');
+
+
+  // annotation text
+
+  svg = d3.select('#chart g');
+
+  addArrow(svg);
+
+  annotation = svg.append('g');
+
+  annotation.append('text')
+    .style('fill', 'black')
+    .style('font-size', '12px')
+    .attr('text-anchor', 'left')
+    .attr('transform', 'translate(250, -25)')
+    .append('tspan')
+    .attr('x', 0)
+    .attr('dy', 12)
+    .text('As of July 30, California has the most cases,')
+    .append('tspan')
+    .attr('x', 0)
+    .attr('dy', 12)
+    .text('while New York has the most deaths');
+
+  annotation.append('line')
+    .attr('x1', 465)
+    .attr('y1', -12)
+    .attr('x2', 480)
+    .attr('y2', -5)
+    .attr('stroke-width', 1)
+    .attr('stroke', 'black')
+    .attr('marker-end', 'url(#triangle)');
+
+  annotation.append('line')
+    .attr('x1', 465)
+    .attr('y1', -12)
+    .attr('x2', 490)
+    .attr('y2', 22)
+    .attr('stroke-width', 1)
+    .attr('stroke', 'black')
+    .attr('marker-end', 'url(#triangle)');
+
+  annotation.append("rect")
+    .attr("x", 245)
+    .attr("y", -25)
+    .attr("width", 220)
+    .attr("height", 30)
+    .attr('fill', ANNOTAION_BACKGROUND_COLOR)
+    .style('opacity', ANNOTAION_BACKGROUND_OPACITY);
+
+  // instructions
+  annotation = svg.append('g');
+
+  annotation.append('text')
+    .style('fill', '#AAAAAA')
+    .style('font-size', '10px')
+    .attr('text-anchor', 'left')
+    .attr('transform', 'translate(20, -30)')
+    .append('tspan')
+    .attr('x', 0)
+    .attr('dy', 12)
+    .text('Mouseover a circle to view details')
+    .append('tspan')
+    .attr('x', 0)
+    .attr('dy', 12)
+    .text('Mouseover a legend icon to filter by region');
 }
 
 function plotScene2() {
-  plotTimeSeries('cases');
-
-  document.getElementById('pagination-2').setAttribute('class', 'active');
+  selectScene(2);
 
   // annotation
-  var svg = d3.select('#chart g');
+  var cb = function() {
+    var svg = d3.select('#chart g');
 
-  addArrow(svg);
+    addArrow(svg);
 
-  var annotation = svg.append('g');
+    var annotation = svg.append('g');
 
-  annotation.append('text')
-    .style('fill', 'black')
-    .style('font-size', '12px')
-    .attr('text-anchor', 'left')
-    .attr('transform', 'translate(60, 70)')
-    .append('tspan')
-    .attr('x', 0)
-    .attr('dy', 12)
-    .text('Outbreak in New York')
-    .append('tspan')
-    .attr('x', 0)
-    .attr('dy', 12)
-    .text('and surrounding states')
-    .append('tspan')
-    .attr('x', 0)
-    .attr('dy', 12)
-    .text('in March');
+    annotation.append('text')
+      .style('fill', 'black')
+      .style('font-size', '12px')
+      .attr('text-anchor', 'left')
+      .attr('transform', 'translate(50, 70)')
+      .append('tspan')
+      .attr('x', 0)
+      .attr('dy', 12)
+      .text('Outbreak in New York')
+      .append('tspan')
+      .attr('x', 0)
+      .attr('dy', 12)
+      .text('and surrounding states')
+      .append('tspan')
+      .attr('x', 0)
+      .attr('dy', 12)
+      .text('in March');
 
-  annotation.append('line')
-    .attr('x1', 110)
-    .attr('y1', 110)
-    .attr('x2', 150)
-    .attr('y2', 150)
-    .attr('stroke-width', 1)
-    .attr('stroke', 'black')
-    .attr('marker-end', 'url(#triangle)');
+    annotation.append("rect")
+      .attr("x", 45)
+      .attr("y", 70)
+      .attr("width", 120)
+      .attr("height", 40)
+      .attr('fill', ANNOTAION_BACKGROUND_COLOR)
+      .style('opacity', ANNOTAION_BACKGROUND_OPACITY);
 
-  annotation.append('text')
-    .style('fill', 'black')
-    .style('font-size', '12px')
-    .attr('text-anchor', 'left')
-    .attr('transform', 'translate(290, -25)')
-    .append('tspan')
-    .attr('x', 0)
-    .attr('dy', 12)
-    .text('California surpassed New York')
-    .append('tspan')
-    .attr('x', 0)
-    .attr('dy', 12)
-    .text('in total cases on July 22');
+    annotation.append('line')
+      .attr('x1', 110)
+      .attr('y1', 110)
+      .attr('x2', 150)
+      .attr('y2', 150)
+      .attr('stroke-width', 1)
+      .attr('stroke', 'black')
+      .attr('marker-end', 'url(#triangle)');
 
-  annotation.append('line')
-    .attr('x1', 440)
-    .attr('y1', -10)
-    .attr('x2', 470)
-    .attr('y2', 0)
-    .attr('stroke-width', 1)
-    .attr('stroke', 'black')
-    .attr('marker-end', 'url(#triangle)');
+    annotation.append('text')
+      .style('fill', 'black')
+      .style('font-size', '12px')
+      .attr('text-anchor', 'left')
+      .attr('transform', 'translate(290, -25)')
+      .append('tspan')
+      .attr('x', 0)
+      .attr('dy', 12)
+      .text('California surpassed New York')
+      .append('tspan')
+      .attr('x', 0)
+      .attr('dy', 12)
+      .text('in total cases on July 22');
+
+    annotation.append('line')
+      .attr('x1', 445)
+      .attr('y1', -10)
+      .attr('x2', 470)
+      .attr('y2', 0)
+      .attr('stroke-width', 1)
+      .attr('stroke', 'black')
+      .attr('marker-end', 'url(#triangle)');
+
+    annotation.append("rect")
+      .attr("x", 285)
+      .attr("y", -25)
+      .attr("width", 160)
+      .attr("height", 30)
+      .attr('fill', ANNOTAION_BACKGROUND_COLOR)
+      .style('opacity', ANNOTAION_BACKGROUND_OPACITY);
+  }
+  plotTimeSeries('cases', cb);
 }
 
 function plotScene3() {
-  plotTimeSeries('deaths');
-
-  document.getElementById('pagination-3').setAttribute('class', 'active');
+  selectScene(3);
 
   // annotation
-  var svg = d3.select('#chart g');
+  var cb = function() {
 
-  addArrow(svg);
+    var svg = d3.select('#chart g');
 
-  var annotation = svg.append('g');
+    addArrow(svg);
 
-  annotation.append('text')
-    .style('fill', 'black')
-    .style('font-size', '12px')
-    .attr('text-anchor', 'left')
-    .attr('transform', 'translate(60, 10)')
-    .append('tspan')
-    .attr('x', 0)
-    .attr('dy', 12)
-    .text('Total deaths in New York')
-    .append('tspan')
-    .attr('x', 0)
-    .attr('dy', 12)
-    .text('reached 10,000 on Apr 10');
+    var annotation = svg.append('g');
 
-  annotation.append('line')
-    .attr('x1', 120)
-    .attr('y1', 40)
-    .attr('x2', 200)
-    .attr('y2', 54)
-    .attr('stroke-width', 1)
-    .attr('stroke', 'black')
-    .attr('marker-end', 'url(#triangle)');
+    annotation.append('text')
+      .style('fill', 'black')
+      .style('font-size', '12px')
+      .attr('text-anchor', 'left')
+      .attr('transform', 'translate(60, 10)')
+      .append('tspan')
+      .attr('x', 0)
+      .attr('dy', 12)
+      .text('Total deaths in New York')
+      .append('tspan')
+      .attr('x', 0)
+      .attr('dy', 12)
+      .text('reached 10,000 on Apr 10');
 
-  annotation.append('text')
-    .style('fill', 'black')
-    .style('font-size', '12px')
-    .attr('text-anchor', 'left')
-    .attr('transform', 'translate(20, 300)')
-    .append('tspan')
-    .attr('x', 0)
-    .attr('dy', 12)
-    .text('Washintgon had the most')
-    .append('tspan')
-    .attr('x', 0)
-    .attr('dy', 12)
-    .text('deaths in early March');
+    annotation.append('line')
+      .attr('x1', 120)
+      .attr('y1', 40)
+      .attr('x2', 200)
+      .attr('y2', 54)
+      .attr('stroke-width', 1)
+      .attr('stroke', 'black')
+      .attr('marker-end', 'url(#triangle)');
 
-  annotation.append('line')
-    .attr('x1', 70)
-    .attr('y1', 330)
-    .attr('x2', 110)
-    .attr('y2', 360)
-    .attr('stroke-width', 1)
-    .attr('stroke', 'black')
-    .attr('marker-end', 'url(#triangle)');
+    annotation.append("rect")
+      .attr("x", 55)
+      .attr("y", 10)
+      .attr("width", 140)
+      .attr("height", 30)
+      .attr('fill', ANNOTAION_BACKGROUND_COLOR)
+      .style('opacity', ANNOTAION_BACKGROUND_OPACITY);
+
+    annotation.append('text')
+      .style('fill', 'black')
+      .style('font-size', '12px')
+      .attr('text-anchor', 'left')
+      .attr('transform', 'translate(15, 280)')
+      .append('tspan')
+      .attr('x', 0)
+      .attr('dy', 12)
+      .text('Washintgon had the most')
+      .append('tspan')
+      .attr('x', 0)
+      .attr('dy', 12)
+      .text('deaths in early March');
+
+    annotation.append('line')
+      .attr('x1', 70)
+      .attr('y1', 315)
+      .attr('x2', 110)
+      .attr('y2', 360)
+      .attr('stroke-width', 1)
+      .attr('stroke', 'black')
+      .attr('marker-end', 'url(#triangle)');
+
+    annotation.append("rect")
+      .attr("x", 10)
+      .attr("y", 280)
+      .attr("width", 130)
+      .attr("height", 30)
+      .attr('fill', ANNOTAION_BACKGROUND_COLOR)
+      .style('opacity', ANNOTAION_BACKGROUND_OPACITY);
+  }
+
+  plotTimeSeries('deaths', cb);
 }
 
-function plotTimeSeries(value) {
-  document.getElementsByClassName('pagination')[0].getElementsByClassName('active')[0].removeAttribute('class');
+function plotTimeSeries(value, cb) {
   document.getElementById('viz-title').innerHTML = 'Cumulative ' + (value.charAt(0).toUpperCase() + value.slice(1)) + ' by State';
-  document.getElementById('viz-description').innerHTML = 'This chart shows the cumulative ' + value + ' by <b>state</b> over time. Each state is represented by a line. States are grouped into geographical <b>regions</b> and marked in different colors and can be used as a <b>filter</b>. There are four states\' data highlighted by default: New York, California, Illinois and Washington. Mouseover a line hightlights the line and shows the actual number of ' + value + ' of the date. <b>Annotations</b> are added to help understand the data.';
+  document.getElementById('viz-description').innerHTML = 'This chart shows the cumulative ' + value + ' by <b>state</b> over time. Each state is represented by a line. States are grouped into geographical <b>regions</b> and marked in different colors and can be used as a filter. There are four states\' data highlighted by default: New York, California, Illinois and Washington. Mousing-over a line hightlights the line and shows the actual number of ' + value + ' of the date. Annotations are added to help understand the data.';
 
   var width = 500, height = 500, padding = 50;
 
@@ -527,7 +633,7 @@ function plotTimeSeries(value) {
   var normalTextOpacity = 0.2;
 
   // line
-  svg.append('g')
+  var path = svg.append('g')
     .selectAll('path')
     .data(data2)
     .enter()
@@ -574,6 +680,22 @@ function plotTimeSeries(value) {
         .style('opacity', 0);
     })
     .attr('d', d => line(d.values));
+
+  path = path._groups;
+
+  console.log(path[0]);
+  var totalLength = path[0].map(el => el.getTotalLength());
+
+  path[0].forEach((el, i) => {
+    d3.select(el)
+      .attr("stroke-dasharray", totalLength[i] + " " + totalLength[i])
+      .attr("stroke-dashoffset", totalLength[i])
+      .transition()
+      .duration(ANIMATION_DURATION)
+      .ease(d3.easeLinear)
+      .attr("stroke-dashoffset", 0)
+      .on("end", i == 0 ? cb : null);
+  });
 
   // text
   svg.append('g')
@@ -668,8 +790,7 @@ function plotTimeSeries(value) {
         .data(legendText)
         .filter((d2, i2) => i2 != i)
         .style('opacity', 0.2);
-    }
-    ).on('mouseout', () => {
+    }).on('mouseout', () => {
       d3.selectAll('.line')
         .style('opacity', d2 => defaultStates.has(d2.values[0].state) ? highlightedOpacity : normalOpacity)
         .attr('stroke-width', d2 => defaultStates.has(d2.values[0].state) ? highlightedStrokeWidth : normalStrokeWidth)
@@ -698,7 +819,24 @@ function plotTimeSeries(value) {
   legend.append('text')
     .attr('x', 640)
     .attr('y', 5)
-    .text('Region (filter)').style('font-size', '15px').attr('alignment-baseline', 'middle')
+    .text('Region').style('font-size', '15px').attr('alignment-baseline', 'middle')
+
+  // instructions
+  annotation = svg.append('g');
+
+  annotation.append('text')
+    .style('fill', '#AAAAAA')
+    .style('font-size', '10px')
+    .attr('text-anchor', 'left')
+    .attr('transform', 'translate(20, -30)')
+    .append('tspan')
+    .attr('x', 0)
+    .attr('dy', 12)
+    .text('Mouseover a line to highlight and view details')
+    .append('tspan')
+    .attr('x', 0)
+    .attr('dy', 12)
+    .text('Mouseover a legend icon to filter by region')
 }
 
 function addArrow(svg) {
@@ -713,4 +851,52 @@ function addArrow(svg) {
     .append('path')
     .attr('d', 'M 0 0 12 6 0 12 3 6')
     .style('fill', 'black');
+}
+
+function selectScene(id) {
+  switch (id) {
+    case 1:
+      selectedScene = 1;
+      document.getElementsByClassName('pagination')[0].getElementsByClassName('active')[0].removeAttribute('class');
+      document.getElementById('pagination-1').setAttribute('class', 'active');
+      document.getElementById('pagination-prev').setAttribute('class', 'disabled');
+      document.getElementById('pagination-next').removeAttribute('class');
+      break;
+    case 2:
+      selectedScene = 2;
+      document.getElementsByClassName('pagination')[0].getElementsByClassName('active')[0].removeAttribute('class');
+      document.getElementById('pagination-2').setAttribute('class', 'active');
+      document.getElementById('pagination-prev').removeAttribute('class');
+      document.getElementById('pagination-next').removeAttribute('class');
+      break;
+    case 3:
+      selectedScene = 3;
+      document.getElementsByClassName('pagination')[0].getElementsByClassName('active')[0].removeAttribute('class');
+      document.getElementById('pagination-3').setAttribute('class', 'active');
+      document.getElementById('pagination-prev').removeAttribute('class');
+      document.getElementById('pagination-next').setAttribute('class', 'disabled');
+      break;
+  }
+}
+
+function plotScene(id) {
+  switch (id) {
+    case 0:
+      selectedScene--;
+      plotScene(selectedScene);
+      break;
+    case -1:
+      selectedScene++;
+      plotScene(selectedScene);
+      break;
+    case 1:
+      plotScene1();
+      break;
+    case 2:
+      plotScene2();
+      break;
+    case 3:
+      plotScene3();
+      break;
+  }
 }

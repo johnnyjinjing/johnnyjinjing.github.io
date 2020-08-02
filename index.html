@@ -24,15 +24,17 @@
       href='https://www.census.gov/newsroom/press-releases/2020/2020-island-areas-populations.html'>Link 2</a>). </p>
   <p><b>Select a scene:</b></p>
   <div class="pagination">
+    <a id='pagination-prev' href="#" class="disabled" onclick="plotScene(0)">&laquo;</a>
     <a id='pagination-1' class="active" href="#" onclick="plotScene1()">1</a>
     <a id='pagination-2' href="#" onclick="plotScene2()">2</a>
     <a id='pagination-3' href="#" onclick="plotScene3()">3</a>
+    <a id='pagination-next' href="#" onclick="plotScene(-1)">&raquo;</a>
   </div>
   <h2 id='viz-title'>Cases vs. Deaths by State (as of July 30)</h2>
   <p id='viz-description'>This chart shows the total cases and deaths by <b>state</b> as of July 30. Each state is
     represented by a circle. States are grouped into geographical <b>regions</b> and marked in different colors and can
-    be used as a <b>filter</b>. The size the circle indicates the <b>population</b> of the state. The dashed lines mark
-    different <b>fatality rate</b>. Mouseover a circle shows the actual number of cases and deaths of the state.</p>
+    be used as a filter. The size the circle indicates the <b>population</b> of the state. The dashed lines mark
+    different <b>fatality rate</b>. Mousing-over a circle shows the actual number of cases and deaths of the state.</p>
   <div class="svg-container">
     <svg id="chart" viewBox="0 0 1000 2000"></svg>
   </div>

@@ -40,7 +40,7 @@ svg circle {
 /* Pagination */
 .pagination {
   overflow: auto;
-  width: 120px;
+  width: 200px;
   border-color: black;
   border-width: 1px;
   border-style: solid;
@@ -60,3 +60,8 @@ svg circle {
 }
 
 .pagination a:hover:not(.active) {background-color: #ddd;}
+
+.pagination .disabled {
+  color: #DDDDDD;
+  pointer-events: none
+}

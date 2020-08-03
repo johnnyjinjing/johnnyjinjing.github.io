@@ -854,6 +854,7 @@ function addArrow(svg) {
 }
 
 function selectScene(id) {
+  d3.selectAll('path').interrupt();
   switch (id) {
     case 1:
       selectedScene = 1;
